@@ -4,7 +4,7 @@ import {
   useEffect,
   useReducer
   } from 'react';
-import { getAPIKey } from 'AutoGPT/utils/apiKey';
+import { getGoogleGeminiAPIKey, getOpenRouterAPIKey } from 'AutoGPT/utils/apiKey';
 import {
   getConfig,
   getModelConfigWithModel,
@@ -118,7 +118,7 @@ function setupReducer(
   if (action === "next_stage") {
     return { ...state, stage: SetupReduceNextStageMap[state.stage] };
   } else if (action === "init_stage") {
-    if (!getAPIKey()) {
+    if (!getGoogleGeminiAPIKey() || !getOpenRouterAPIKey()) {
       return { ...state, stage: "get_token" };
     }
 
@@ -162,9 +162,9 @@ function aiInfoReducer(
     return { ...state, description: action.description };
   } else if (action.type === "set_model") {
     const modelToSelect: LLMModel =
-      action.model === "gpt-3.5-turbo" || action.model === "gpt-3.5-turbo-0301"
-        ? "gpt-3.5-turbo-16k"
-        : "gpt-4";
+      action.model === "gemini-1.5-pro-exp-0801" || action.model === "openrouter-1"
+        ? action.model
+        : "gemini-1.5-pro-exp-0801";
     const modelConfig = getModelConfigWithModel(modelToSelect);
     updatePartialConfig({ models: modelConfig });
     return { ...state, model: action.model };

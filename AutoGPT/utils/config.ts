@@ -1,13 +1,15 @@
 import type { AutoGPTConfig, LLMModel } from "./types";
 
+
+// Define the DEFAULT_CONFIG constant with the correct structure
 const DEFAULT_CONFIG: AutoGPTConfig = {
   models: {
-    mainLoopModel: "gpt-4",
-    schemaFixingModel: "gpt-4",
+    mainLoopModel: "gemini-1.5-pro-exp-0801",
+    schemaFixingModel: "gemini-1.5-pro-exp-0801",
     plugins: {
-      agentModel: "gpt-3.5-turbo-16k",
-      browserModel: "gpt-3.5-turbo-16k",
-      codeCreationModel: "gpt-4",
+      agentModel: "openrouter-1",
+      browserModel: "openrouter-1",
+      codeCreationModel: "gemini-1.5-pro-exp-0801",
     },
   },
 };

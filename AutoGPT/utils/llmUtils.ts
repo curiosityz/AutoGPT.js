@@ -1,4 +1,4 @@
-import { getAPIKey } from './apiKey';
+import { getGoogleGeminiAPIKey, getOpenRouterAPIKey } from './apiKey';
 import type { LLMMessage, LLMModel } from "./types";
 
 export interface CallLLMChatCompletionArgs {
@@ -51,13 +51,24 @@ export async function callLLMChatCompletion({
     max_tokens: maxTokens,
   };
 
-  const apiKey = getAPIKey();
+  let apiKey;
+  let apiUrl;
+  if (model.startsWith("gemini")) {
+    apiKey = getGoogleGeminiAPIKey();
+    apiUrl = "https://api.google.com/v1/chat/completions";
+  } else if (model.startsWith("openrouter")) {
+    apiKey = getOpenRouterAPIKey();
+    apiUrl = "https://api.openrouter.com/v1/chat/completions";
+  } else {
+    throw new Error("Unsupported model");
+  }
+
   const headers = new Headers();
   headers.set("Authorization", `Bearer ${apiKey}`);
   headers.set("Content-Type", "application/json");
   headers.set("Accept", "application/json");
 
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
+  const response = await fetch(apiUrl, {
     method: "POST",
     headers,
     body: JSON.stringify(reqBody),
@@ -65,7 +76,7 @@ export async function callLLMChatCompletion({
 
   if (response.status !== 200) {
     const errorText = await response.text();
-    console.error("Error calling OpenAI service", response.status, errorText);
+    console.error("Error calling AI service", response.status, errorText);
     return {
       status: CallLLMChatCompletionResponseStatus.Error,
       message: `Error calling API with status code ${response.status} and message "${errorText}"`,
