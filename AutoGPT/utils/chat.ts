@@ -4,7 +4,7 @@ import {
   type CallLLMChatCompletionArgs,
   type CallLLMChatCompletionResponse,
   CallLLMChatCompletionResponseStatus
-  } from './llmUtils';
+} from './llmUtils';
 import type { LLMMessage, LLMModel } from "./types";
 
 interface ChatWithAiArgs {

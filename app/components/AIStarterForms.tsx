@@ -119,7 +119,8 @@ export function AIGoalsForm() {
     setupDispatcher("prev_stage");
   }, [setupDispatcher]);
 
-  const gpt4model: LLMModel = "gpt-4";
+  const geminiModel: LLMModel = "gemini-1.5-pro-exp-0801";
+  const openRouterModel: LLMModel = "openrouter-1";
 
   return (
     <div className="bg-white shadow sm:w-96 sm:rounded-lg">
@@ -151,7 +152,7 @@ export function AIGoalsForm() {
               htmlFor="location"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
-              OpenAI model to use
+              AI model to use
             </label>
             <select
               id="location"
@@ -160,7 +161,8 @@ export function AIGoalsForm() {
               defaultValue={getConfig().models.mainLoopModel}
               ref={modelSelectorRef}
             >
-              <option value={gpt4model}>🐢 GPT 4</option>
+              <option value={geminiModel}>🌟 Google Gemini</option>
+              <option value={openRouterModel}>🚀 OpenRouter</option>
             </select>
           </div>
 

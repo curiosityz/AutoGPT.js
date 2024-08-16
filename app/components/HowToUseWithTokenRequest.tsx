@@ -1,17 +1,23 @@
-import { getAPIKey, setAPIKey } from 'AutoGPT/utils/apiKey';
+import { getGoogleGeminiAPIKey, setGoogleGeminiAPIKey, getOpenRouterAPIKey, setOpenRouterAPIKey } from 'AutoGPT/utils/apiKey';
 import { useAIStateDispatcher } from './AIStateProvider';
 import { useCallback, useRef } from 'react';
 
 export function HowToUseWithTokenRequest() {
   const { setupDispatcher } = useAIStateDispatcher();
-  const tokenRef = useRef<HTMLInputElement>(null);
+  const googleGeminiTokenRef = useRef<HTMLInputElement>(null);
+  const openRouterTokenRef = useRef<HTMLInputElement>(null);
+
   const onSaveClicked = useCallback(() => {
-    if (tokenRef.current?.value) {
-      setAPIKey(tokenRef.current?.value);
+    if (googleGeminiTokenRef.current?.value) {
+      setGoogleGeminiAPIKey(googleGeminiTokenRef.current?.value);
     }
 
-    if (getAPIKey()) {
-      // Only go to next stage if there is an API key present
+    if (openRouterTokenRef.current?.value) {
+      setOpenRouterAPIKey(openRouterTokenRef.current?.value);
+    }
+
+    if (getGoogleGeminiAPIKey() && getOpenRouterAPIKey()) {
+      // Only go to next stage if there are API keys present
       setupDispatcher("next_stage");
     }
   }, [setupDispatcher]);
@@ -34,36 +40,58 @@ export function HowToUseWithTokenRequest() {
           <PluginGrid />
         </div>
         <h3 className="mt-4 text-base font-semibold leading-6 text-gray-900">
-          Token
+          Tokens
         </h3>
         <div className="mt-2 max-w-xl text-sm text-gray-500">
           <p>
-            AutoGPT uses OpenAI GPT directly from browser. The token is required
-            to call those APIs and is only stored on your browser. You can go to{" "}
+            AutoGPT uses Google Gemini and OpenRouter APIs directly from the browser. The tokens are required
+            to call those APIs and are only stored on your browser. You can go to{" "}
             <a
-              href="https://platform.openai.com/account/api-keys"
+              href="https://cloud.google.com/gemini"
               target="_blank"
               rel="noreferrer"
               className="text-blue-600 underline underline-offset-1"
             >
-              OpenAI
+              Google Gemini
             </a>{" "}
-            to create a new token.
+            and{" "}
+            <a
+              href="https://openrouter.ai"
+              target="_blank"
+              rel="noreferrer"
+              className="text-blue-600 underline underline-offset-1"
+            >
+              OpenRouter
+            </a>{" "}
+            to create new tokens.
           </p>
         </div>
 
         <form className="mt-5 sm:flex sm:items-center">
           <div className="sm:w-full sm:max-w-2xl">
-            <label htmlFor="token" className="sr-only">
-              Token
+            <label htmlFor="google-gemini-token" className="sr-only">
+              Google Gemini Token
             </label>
             <input
-              ref={tokenRef}
+              ref={googleGeminiTokenRef}
               type="text"
-              name="token"
-              id="token"
+              name="google-gemini-token"
+              id="google-gemini-token"
               className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              placeholder={getAPIKey() ?? "sk-1234..."}
+              placeholder={getGoogleGeminiAPIKey() ?? "sk-google-gemini-1234..."}
+            />
+          </div>
+          <div className="sm:w-full sm:max-w-2xl mt-4 sm:mt-0 sm:ml-3">
+            <label htmlFor="openrouter-token" className="sr-only">
+              OpenRouter Token
+            </label>
+            <input
+              ref={openRouterTokenRef}
+              type="text"
+              name="openrouter-token"
+              id="openrouter-token"
+              className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              placeholder={getOpenRouterAPIKey() ?? "sk-openrouter-1234..."}
             />
           </div>
           <button
